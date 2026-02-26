@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time & Limit - Browser Extension</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-container full-page">
+      <header>
+        <div class="top-bar">
+          <a href="index.html" style="text-decoration: none">
+            <div class="logo">
+              <img src="logo.svg" alt="Time & Limit Logo" class="logo-img" />
+              Time & Limit
+            </div>
+          </a>
+          <nav class="nav-links">
+            <!-- Dark Mode Toggle styled like the extension popup -->
+            <label
+              class="switch theme-toggle-container"
+              title="Toggle Dark Mode"
+            >
+              <input type="checkbox" id="theme-toggle" />
+              <span class="slider round"></span>
+            </label>
+            <a href="privacy.html" class="nav-link">Privacy Policy</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="landing-main">
+        <div class="container">
+          <!-- Hero Section -->
+          <section class="hero-section">
+            <h1 class="page-title">Take Back Your Time</h1>
+            <p class="page-subtitle">
+              The ultimate productivity extension. Block distractions, set
+              limits, and track your digital footprint.
+            </p>
+
+            <div class="hero-actions">
+              <button class="primary-btn hero-btn" id="install-btn">
+                Add to Browser - It's Free
+              </button>
+            </div>
+
+            <!-- Decorative elements resembling history page chart -->
+            <div class="chart-preview">
+              <div class="chart-header">
+                <div class="chart-title">Reclaim Your Days</div>
+              </div>
+              <div class="bar-chart">
+                <div class="bar-column">
+                  <div class="chart-bar" style="height: 40%"></div>
+                </div>
+                <div class="bar-column">
+                  <div class="chart-bar" style="height: 20%"></div>
+                </div>
+                <div class="bar-column">
+                  <div class="chart-bar" style="height: 60%"></div>
+                </div>
+                <div class="bar-column">
+                  <div class="chart-bar" style="height: 30%"></div>
+                </div>
+                <div class="bar-column selected">
+                  <div class="chart-bar" style="height: 90%"></div>
+                </div>
+                <div class="bar-column">
+                  <div class="chart-bar" style="height: 50%"></div>
+                </div>
+                <div class="bar-column">
+                  <div class="chart-bar" style="height: 70%"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Features Section -->
+          <section id="features" class="features-section">
+            <h2 class="section-heading">Why Time & Limit?</h2>
+            <div class="breakdown-grid">
+              <div class="stat-card">
+                <div class="card-icon">⚡</div>
+                <div class="card-content">
+                  <div class="card-label">Focus Faster</div>
+                  <div class="card-value">Block Sites</div>
+                  <p class="card-desc">
+                    Instantly block the websites that steal your attention.
+                  </p>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="card-icon">⏳</div>
+                <div class="card-content">
+                  <div class="card-label">Set Boundaries</div>
+                  <div class="card-value">Daily Limits</div>
+                  <p class="card-desc">
+                    Allocate time budgets for your favorite time-wasting apps.
+                  </p>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="card-icon">📊</div>
+                <div class="card-content">
+                  <div class="card-label">Deep Insights</div>
+                  <div class="card-value">Analytics</div>
+                  <p class="card-desc">
+                    See exactly where your time goes with beautiful weekly
+                    charts.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="detailed-features">
+              <div class="feature-row">
+                <div class="feature-text">
+                  <h3>Smart Domain Matching</h3>
+                  <p>
+                    Whether you type facebook.com, m.facebook.com, or
+                    www.facebook.com, Time & Limit intelligently matches the
+                    domain and blocks or limits it effectively so you can't
+                    cheat your own rules.
+                  </p>
+                </div>
+                <div class="feature-visual neo-box">
+                  <div
+                    class="word-pill"
+                    style="background: var(--neo-primary); color: #000"
+                  >
+                    facebook.com
+                  </div>
+                  <div
+                    class="word-pill"
+                    style="background: var(--neo-secondary); color: #000"
+                  >
+                    m.facebook.com
+                  </div>
+                  <div
+                    class="word-pill"
+                    style="background: var(--neo-accent); color: #000"
+                  >
+                    youtube.com
+                  </div>
+                </div>
+              </div>
+
+              <div class="feature-row reverse">
+                <div class="feature-text">
+                  <h3>Strict Block and Soft Limits</h3>
+                  <p>
+                    Sometimes you need to completely eliminate a distraction
+                    (Block). Other times, you just want to control your usage
+                    (Limit). Time & Limit gives you both options in a unified,
+                    simple interface.
+                  </p>
+                </div>
+                <div class="feature-visual neo-box">
+                  <div class="demo-buttons">
+                    <button class="demo-btn danger">Block Site</button>
+                    <button class="demo-btn success">15m Limit</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="feature-row">
+                <div class="feature-text">
+                  <h3>Neo-Brutalist "Blocked" Experience</h3>
+                  <p>
+                    When you try to visit a blocked site or when your time limit
+                    runs out, you don't get a boring error page. You get a bold,
+                    unforgiving, neo-brutalist wall telling you to get back to
+                    work.
+                  </p>
+                </div>
+                <div class="feature-visual neo-box blocked-preview">
+                  <div class="blocked-text">BLOCKED</div>
+                </div>
+              </div>
+
+              <div class="feature-row reverse">
+                <div class="feature-text">
+                  <h3>Visual History & Analytics</h3>
+                  <p>
+                    Navigate to your History Dashboard to see exactly where your
+                    focus went. Review your daily usage in an interactive bar
+                    chart and discover your top distractions with percentage
+                    breakdowns.
+                  </p>
+                </div>
+                <div class="feature-visual neo-box dark-preview">
+                  <div class="stat-item">
+                    <div class="domain-info">
+                      <div class="favicon bg-blue"></div>
+                      youtube.com
+                    </div>
+                    <div class="time-val">45m</div>
+                  </div>
+                  <div class="stat-item">
+                    <div class="domain-info">
+                      <div class="favicon bg-red"></div>
+                      reddit.com
+                    </div>
+                    <div class="time-val">20m</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- How it Works Section -->
+          <section id="how-it-works" class="how-it-works-section">
+            <h2 class="section-heading">How It Works</h2>
+            <div class="steps-container">
+              <div class="step-card">
+                <div class="step-number">1</div>
+                <h3 class="step-title">Install & Pin</h3>
+                <p class="step-desc">
+                  Add Time & Limit to your browser and pin it for quick access
+                  when you feel the urge to procrastinate.
+                </p>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step-card">
+                <div class="step-number">2</div>
+                <h3 class="step-title">Set Your Rules</h3>
+                <p class="step-desc">
+                  Open the extension and add your top distractions to the Block
+                  List or set daily time budgets.
+                </p>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step-card">
+                <div class="step-number">3</div>
+                <h3 class="step-title">Stay Focused</h3>
+                <p class="step-desc">
+                  Browse freely. Time & Limit automatically tracks your usage
+                  and blocks access when necessary.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- FAQs Section -->
+          <section id="faqs" class="faq-section">
+            <h2 class="section-heading">Frequently Asked Questions</h2>
+            <div class="faq-accordion">
+              <div class="faq-item">
+                <button class="faq-question">
+                  Is Time & Limit perfectly free?
+                  <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                  <div class="faq-answer-inner">
+                    <p>
+                      Yes! Time & Limit is 100% free with no premium tiers,
+                      subscriptions, or hidden fees. Just install and start
+                      reclaiming your time.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-question">
+                  Does it track my data or send it to a server?
+                  <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                  <div class="faq-answer-inner">
+                    <p>
+                      No. All data is stored locally on your device. We respect
+                      your privacy, and your browsing history never leaves your
+                      browser.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-question">
+                  How does the daily time limit work?
+                  <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                  <div class="faq-answer-inner">
+                    <p>
+                      When you set a limit (e.g., 30 minutes on youtube.com),
+                      the extension counts active time spent on the site. If you
+                      exceed the budget, the site gets blocked until tomorrow.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-question">
+                  Can I unblock a site if I really need it?
+                  <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                  <div class="faq-answer-inner">
+                    <p>
+                      Yes, you can easily remove a site from the Block List or
+                      adjust your limits from the extension popup at any time.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer>
+        <div class="footer-links">
+          <a href="privacy.html" class="nav-link">Privacy Policy</a>
+        </div>
+        <div class="footer-text">
+          Time is the only currency you can't save. Spend it wisely.
+        </div>
+        <div class="footer-credits">
+          &copy; 2026 Time & Limit. All rights reserved.<br />
+          Made by <span class="highlight">Eon</span>
+        </div>
+      </footer>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
