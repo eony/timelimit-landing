@@ -1,16 +1,18 @@
 <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Hard Shadow -->
-  <rect x="24" y="24" width="96" height="96" rx="16" fill="black"/>
-  <!-- Main Box -->
-  <rect x="16" y="16" width="96" height="96" rx="16" fill="#00d4ff" stroke="black" stroke-width="6"/>
-  <!-- Hourglass Icon -->
-  <!-- Top Triangle (Filled Black) -->
-  <path d="M44 44H84L64 64L44 44Z" fill="black" stroke="black" stroke-width="4" stroke-linejoin="round"/>
-  <!-- Bottom Triangle (Outlined Black, White flll for 'empty' look, or Black for solid) -->
-  <!-- Let's do solid black for bold brutalism, or maybe striped? Let's do White allowed to look like glass/sand -->
-  <path d="M44 84H84L64 64L44 84Z" fill="white" stroke="black" stroke-width="4" stroke-linejoin="round"/>
-  <!-- Falling Sand -->
-  <line x1="64" y1="64" x2="64" y2="74" stroke="black" stroke-width="4" stroke-linecap="round"/>
-  <!-- Glitch Accent (Optional) -->
-  <rect x="88" y="10" width="12" height="12" fill="black" transform="rotate(15 94 16)"/>
+  <!-- Hard shadow -->
+  <rect x="15" y="15" width="104" height="104" rx="22" fill="#000"/>
+  <!-- Tile -->
+  <rect x="7" y="7" width="104" height="104" rx="22" fill="#00d4ff" stroke="#000" stroke-width="6"/>
+  <!-- Stopwatch crown + side button -->
+  <rect x="53" y="25" width="12" height="10" fill="#000"/>
+  <rect x="47" y="18" width="24" height="9" rx="3" fill="#000"/>
+  <rect x="80" y="35" width="13" height="11" rx="2" fill="#000" transform="rotate(45 86.5 40.5)"/>
+  <!-- Dial -->
+  <circle cx="59" cy="67" r="31" fill="#fff" stroke="#000" stroke-width="6"/>
+  <!-- Used-time wedge (12 → 4 o'clock) -->
+  <path d="M59 67V39A28 28 0 0 1 83.25 81Z" fill="#facc15"/>
+  <!-- Hand + hub -->
+  <path d="M59 67V44" stroke="#000" stroke-width="6" stroke-linecap="round"/>
+  <path d="M59 67L78.05 78" stroke="#000" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="59" cy="67" r="5" fill="#000"/>
 </svg>

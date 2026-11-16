@@ -1,335 +1,1309 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Time & Limit - Browser Extension</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="app-container full-page">
-      <header>
-        <div class="top-bar">
-          <a href="index.html" style="text-decoration: none">
-            <div class="logo">
-              <img src="logo.svg" alt="Time & Limit Logo" class="logo-img" />
-              Time & Limit
-            </div>
-          </a>
-          <nav class="nav-links">
-            <!-- Dark Mode Toggle styled like the extension popup -->
-            <label
-              class="switch theme-toggle-container"
-              title="Toggle Dark Mode"
-            >
-              <input type="checkbox" id="theme-toggle" />
-              <span class="slider round"></span>
-            </label>
-            <a href="privacy.html" class="nav-link">Privacy Policy</a>
-          </nav>
-        </div>
-      </header>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>
+			Time &amp; Limit: Screen Time Tracker &amp; Site Blocker for Chrome
+		</title>
+		<meta
+			name="description"
+			content="Time & Limit is a free Chrome extension that tracks where your time goes, sets daily limits on distracting sites, blocks what you don't need, and keeps all your data on your device."
+		/>
+		<meta name="theme-color" content="#00d4ff" />
+		<meta name="color-scheme" content="light dark" />
 
-      <main class="landing-main">
-        <div class="container">
-          <!-- Hero Section -->
-          <section class="hero-section">
-            <h1 class="page-title">Take Back Your Time</h1>
-            <p class="page-subtitle">
-              The ultimate productivity extension. Block distractions, set
-              limits, and track your digital footprint.
-            </p>
+		<!-- Social previews -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="Time & Limit: Take back your time" />
+		<meta
+			property="og:description"
+			content="Track your browsing, set daily limits, block distractions and schedule distraction-free hours. Free, no account, no servers."
+		/>
+		<meta name="twitter:card" content="summary" />
 
-            <div class="hero-actions">
-              <button class="primary-btn hero-btn" id="install-btn">
-                Add to Browser - It's Free
-              </button>
-            </div>
+		<link rel="icon" href="logo.svg" type="image/svg+xml" />
+		<link
+			rel="preload"
+			href="fonts/inter-latin-wght-normal.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<link rel="stylesheet" href="style.css" />
 
-            <!-- Decorative elements resembling history page chart -->
-            <div class="chart-preview">
-              <div class="chart-header">
-                <div class="chart-title">Reclaim Your Days</div>
-              </div>
-              <div class="bar-chart">
-                <div class="bar-column">
-                  <div class="chart-bar" style="height: 40%"></div>
-                </div>
-                <div class="bar-column">
-                  <div class="chart-bar" style="height: 20%"></div>
-                </div>
-                <div class="bar-column">
-                  <div class="chart-bar" style="height: 60%"></div>
-                </div>
-                <div class="bar-column">
-                  <div class="chart-bar" style="height: 30%"></div>
-                </div>
-                <div class="bar-column selected">
-                  <div class="chart-bar" style="height: 90%"></div>
-                </div>
-                <div class="bar-column">
-                  <div class="chart-bar" style="height: 50%"></div>
-                </div>
-                <div class="bar-column">
-                  <div class="chart-bar" style="height: 70%"></div>
-                </div>
-              </div>
-            </div>
-          </section>
+		<!-- Apply the saved or system theme before first paint to avoid a flash -->
+		<script>
+			(function () {
+				try {
+					var saved = localStorage.getItem("timeLimitTheme");
+					var dark = saved
+						? saved === "dark"
+						: window.matchMedia("(prefers-color-scheme: dark)")
+								.matches;
+					document.documentElement.dataset.theme = dark
+						? "dark"
+						: "light";
+				} catch (e) {}
+			})();
+		</script>
+		<script src="script.js" defer></script>
+	</head>
+	<body>
+		<!-- Icon sprite (Lucide-style line icons) -->
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="sprite"
+			aria-hidden="true"
+		>
+			<symbol id="i-clock" viewBox="0 0 24 24">
+				<circle cx="12" cy="12" r="10" />
+				<polyline points="12 6 12 12 16 14" />
+			</symbol>
+			<symbol id="i-timer" viewBox="0 0 24 24">
+				<line x1="10" x2="14" y1="2" y2="2" />
+				<line x1="12" x2="15" y1="14" y2="11" />
+				<circle cx="12" cy="14" r="8" />
+			</symbol>
+			<symbol id="i-ban" viewBox="0 0 24 24">
+				<circle cx="12" cy="12" r="10" />
+				<path d="m4.9 4.9 14.2 14.2" />
+			</symbol>
+			<symbol id="i-target" viewBox="0 0 24 24">
+				<circle cx="12" cy="12" r="10" />
+				<circle cx="12" cy="12" r="6" />
+				<circle cx="12" cy="12" r="2" />
+			</symbol>
+			<symbol id="i-calendar" viewBox="0 0 24 24">
+				<rect width="18" height="18" x="3" y="4" rx="2" />
+				<path d="M16 2v4" />
+				<path d="M8 2v4" />
+				<path d="M3 10h18" />
+			</symbol>
+			<symbol id="i-lock" viewBox="0 0 24 24">
+				<rect width="18" height="11" x="3" y="11" rx="2" />
+				<path d="M7 11V7a5 5 0 0 1 10 0v4" />
+			</symbol>
+			<symbol id="i-chart" viewBox="0 0 24 24">
+				<path d="M3 3v18h18" />
+				<path d="M18 17V9" />
+				<path d="M13 17V5" />
+				<path d="M8 17v-3" />
+			</symbol>
+			<symbol id="i-download" viewBox="0 0 24 24">
+				<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+				<polyline points="7 10 12 15 17 10" />
+				<line x1="12" x2="12" y1="15" y2="3" />
+			</symbol>
+			<symbol id="i-shield" viewBox="0 0 24 24">
+				<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+				<path d="m9 12 2 2 4-4" />
+			</symbol>
+			<symbol id="i-check" viewBox="0 0 24 24">
+				<path d="M20 6 9 17l-5-5" />
+			</symbol>
+			<symbol id="i-x" viewBox="0 0 24 24">
+				<path d="M18 6 6 18" />
+				<path d="m6 6 12 12" />
+			</symbol>
+			<symbol id="i-sun" viewBox="0 0 24 24">
+				<circle cx="12" cy="12" r="4" />
+				<path d="M12 2v2" />
+				<path d="M12 20v2" />
+				<path d="m4.93 4.93 1.41 1.41" />
+				<path d="m17.66 17.66 1.41 1.41" />
+				<path d="M2 12h2" />
+				<path d="M20 12h2" />
+				<path d="m6.34 17.66-1.41 1.41" />
+				<path d="m19.07 4.93-1.41 1.41" />
+			</symbol>
+			<symbol id="i-moon" viewBox="0 0 24 24">
+				<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+			</symbol>
+			<symbol id="i-menu" viewBox="0 0 24 24">
+				<line x1="4" x2="20" y1="6" y2="6" />
+				<line x1="4" x2="20" y1="12" y2="12" />
+				<line x1="4" x2="20" y1="18" y2="18" />
+			</symbol>
+			<symbol id="i-arrow" viewBox="0 0 24 24">
+				<path d="M5 12h14" />
+				<path d="m12 5 7 7-7 7" />
+			</symbol>
+			<symbol id="i-bell" viewBox="0 0 24 24">
+				<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+				<path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+			</symbol>
+			<symbol id="i-message" viewBox="0 0 24 24">
+				<path
+					d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+				/>
+			</symbol>
+			<symbol id="i-window" viewBox="0 0 24 24">
+				<rect width="20" height="16" x="2" y="4" rx="2" />
+				<path d="M2 9h20" />
+				<path d="M6 6.5h.01" />
+				<path d="M9 6.5h.01" />
+			</symbol>
+			<symbol id="i-database" viewBox="0 0 24 24">
+				<ellipse cx="12" cy="5" rx="9" ry="3" />
+				<path d="M3 5v14a9 3 0 0 0 18 0V5" />
+				<path d="M3 12a9 3 0 0 0 18 0" />
+			</symbol>
+			<symbol id="i-coffee" viewBox="0 0 24 24">
+				<path d="M10 2v2" />
+				<path d="M14 2v2" />
+				<path
+					d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"
+				/>
+				<path d="M6 2v2" />
+			</symbol>
+			<symbol id="i-image" viewBox="0 0 24 24">
+				<rect width="18" height="18" x="3" y="3" rx="2" />
+				<circle cx="9" cy="9" r="2" />
+				<path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21" />
+			</symbol>
+			<symbol id="i-chevron" viewBox="0 0 24 24">
+				<path d="m6 9 6 6 6-6" />
+			</symbol>
+		</svg>
 
-          <!-- Features Section -->
-          <section id="features" class="features-section">
-            <h2 class="section-heading">Why Time & Limit?</h2>
-            <div class="breakdown-grid">
-              <div class="stat-card">
-                <div class="card-icon">⚡</div>
-                <div class="card-content">
-                  <div class="card-label">Focus Faster</div>
-                  <div class="card-value">Block Sites</div>
-                  <p class="card-desc">
-                    Instantly block the websites that steal your attention.
-                  </p>
-                </div>
-              </div>
+		<a class="skip-link" href="#main">Skip to content</a>
 
-              <div class="stat-card">
-                <div class="card-icon">⏳</div>
-                <div class="card-content">
-                  <div class="card-label">Set Boundaries</div>
-                  <div class="card-value">Daily Limits</div>
-                  <p class="card-desc">
-                    Allocate time budgets for your favorite time-wasting apps.
-                  </p>
-                </div>
-              </div>
+		<header class="site-header">
+			<div class="container header-inner">
+				<a
+					href="index.html"
+					class="brand"
+					aria-label="Time &amp; Limit home"
+				>
+					<img
+						src="logo.svg"
+						alt=""
+						class="brand-logo"
+						width="32"
+						height="32"
+					/>
+					<span>Time &amp; Limit</span>
+				</a>
 
-              <div class="stat-card">
-                <div class="card-icon">📊</div>
-                <div class="card-content">
-                  <div class="card-label">Deep Insights</div>
-                  <div class="card-value">Analytics</div>
-                  <p class="card-desc">
-                    See exactly where your time goes with beautiful weekly
-                    charts.
-                  </p>
-                </div>
-              </div>
-            </div>
+				<button
+					type="button"
+					class="icon-btn menu-btn"
+					id="menu-btn"
+					aria-label="Open menu"
+					aria-expanded="false"
+					aria-controls="site-nav"
+				>
+					<svg class="icon icon-open" aria-hidden="true">
+						<use href="#i-menu" />
+					</svg>
+					<svg class="icon icon-close" aria-hidden="true">
+						<use href="#i-x" />
+					</svg>
+				</button>
 
-            <div class="detailed-features">
-              <div class="feature-row">
-                <div class="feature-text">
-                  <h3>Smart Domain Matching</h3>
-                  <p>
-                    Whether you type facebook.com, m.facebook.com, or
-                    www.facebook.com, Time & Limit intelligently matches the
-                    domain and blocks or limits it effectively so you can't
-                    cheat your own rules.
-                  </p>
-                </div>
-                <div class="feature-visual neo-box">
-                  <div
-                    class="word-pill"
-                    style="background: var(--neo-primary); color: #000"
-                  >
-                    facebook.com
-                  </div>
-                  <div
-                    class="word-pill"
-                    style="background: var(--neo-secondary); color: #000"
-                  >
-                    m.facebook.com
-                  </div>
-                  <div
-                    class="word-pill"
-                    style="background: var(--neo-accent); color: #000"
-                  >
-                    youtube.com
-                  </div>
-                </div>
-              </div>
+				<nav class="site-nav" id="site-nav" aria-label="Main">
+					<a href="#features">Features</a>
+					<a href="#tracking">How tracking works</a>
+					<a href="#privacy">Privacy</a>
+					<a href="#faq">FAQ</a>
+					<button
+						type="button"
+						class="icon-btn theme-btn"
+						id="theme-btn"
+						aria-label="Switch to dark mode"
+						aria-pressed="false"
+					>
+						<svg class="icon icon-moon" aria-hidden="true">
+							<use href="#i-moon" />
+						</svg>
+						<svg class="icon icon-sun" aria-hidden="true">
+							<use href="#i-sun" />
+						</svg>
+					</button>
+					<a
+						href="#install"
+						class="btn btn-primary btn-sm"
+						data-store-link
+						>Add to Chrome</a
+					>
+				</nav>
+			</div>
+		</header>
 
-              <div class="feature-row reverse">
-                <div class="feature-text">
-                  <h3>Strict Block and Soft Limits</h3>
-                  <p>
-                    Sometimes you need to completely eliminate a distraction
-                    (Block). Other times, you just want to control your usage
-                    (Limit). Time & Limit gives you both options in a unified,
-                    simple interface.
-                  </p>
-                </div>
-                <div class="feature-visual neo-box">
-                  <div class="demo-buttons">
-                    <button class="demo-btn danger">Block Site</button>
-                    <button class="demo-btn success">15m Limit</button>
-                  </div>
-                </div>
-              </div>
+		<main id="main">
+			<!-- Hero -->
+			<section class="hero">
+				<div class="container hero-grid">
+					<div class="hero-copy">
+						<p class="eyebrow">
+							Free Chrome extension &middot; No account &middot;
+							No servers
+						</p>
+						<h1>Take back your time.</h1>
+						<p class="lead">
+							Time &amp; Limit shows you exactly where your
+							browsing hours go, gives distracting sites a daily
+							budget, and blocks what you don't need, so the
+							internet works for you instead of the other way
+							around.
+						</p>
+						<div class="hero-actions">
+							<a
+								href="#install"
+								class="btn btn-primary"
+								data-store-link
+							>
+								Add to Chrome &mdash; it's free
+								<svg class="icon" aria-hidden="true">
+									<use href="#i-arrow" />
+								</svg>
+							</a>
+							<a href="#features" class="btn btn-secondary"
+								>See what it does</a
+							>
+						</div>
+						<ul class="hero-points">
+							<li>
+								<svg class="icon" aria-hidden="true">
+									<use href="#i-check" /></svg
+								>Your browsing data never leaves your device
+							</li>
+							<li>
+								<svg class="icon" aria-hidden="true">
+									<use href="#i-check" /></svg
+								>Counts real attention, not open tabs
+							</li>
+							<li>
+								<svg class="icon" aria-hidden="true">
+									<use href="#i-check" /></svg
+								>Set up in under a minute
+							</li>
+						</ul>
+					</div>
 
-              <div class="feature-row">
-                <div class="feature-text">
-                  <h3>Neo-Brutalist "Blocked" Experience</h3>
-                  <p>
-                    When you try to visit a blocked site or when your time limit
-                    runs out, you don't get a boring error page. You get a bold,
-                    unforgiving, neo-brutalist wall telling you to get back to
-                    work.
-                  </p>
-                </div>
-                <div class="feature-visual neo-box blocked-preview">
-                  <div class="blocked-text">BLOCKED</div>
-                </div>
-              </div>
+					<!-- Illustration of the extension popup -->
+					<div
+						class="hero-visual"
+						role="img"
+						aria-label="The Time and Limit popup showing 3 hours 42 minutes today, with YouTube, Reddit and GitHub listed and a 30 minute limit on YouTube."
+					>
+						<div class="mock-popup" aria-hidden="true">
+							<div class="mock-popup-head">
+								<img
+									src="logo.svg"
+									alt=""
+									width="22"
+									height="22"
+								/>
+								<span>Time &amp; Limit</span>
+							</div>
+							<div class="mock-tabs">
+								<span class="is-active">Stats</span
+								><span>Limits</span><span>Block</span>
+							</div>
+							<div class="mock-total">
+								<small>Total time today</small>
+								<strong>3h 42m</strong>
+							</div>
+							<ul class="mock-sites">
+								<li>
+									<span class="dot dot-red"></span
+									>youtube.com<span class="mock-pill"
+										>8m left</span
+									><b>22m</b>
+								</li>
+								<li>
+									<span class="dot dot-purple"></span
+									>reddit.com<b>48m</b>
+								</li>
+								<li>
+									<span class="dot dot-green"></span
+									>github.com<b>1h 54m</b>
+								</li>
+							</ul>
+						</div>
+						<div class="mock-badge" aria-hidden="true">8m</div>
+					</div>
+				</div>
+			</section>
 
-              <div class="feature-row reverse">
-                <div class="feature-text">
-                  <h3>Visual History & Analytics</h3>
-                  <p>
-                    Navigate to your History Dashboard to see exactly where your
-                    focus went. Review your daily usage in an interactive bar
-                    chart and discover your top distractions with percentage
-                    breakdowns.
-                  </p>
-                </div>
-                <div class="feature-visual neo-box dark-preview">
-                  <div class="stat-item">
-                    <div class="domain-info">
-                      <div class="favicon bg-blue"></div>
-                      youtube.com
-                    </div>
-                    <div class="time-val">45m</div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="domain-info">
-                      <div class="favicon bg-red"></div>
-                      reddit.com
-                    </div>
-                    <div class="time-val">20m</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
+			<!-- Three pillars -->
+			<section class="section pillars" aria-labelledby="pillars-title">
+				<div class="container">
+					<h2 class="visually-hidden" id="pillars-title">
+						Track, limit and block
+					</h2>
+					<div class="pillar-grid">
+						<article class="card pillar">
+							<span class="icon-tile tile-cyan"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-clock" /></svg
+							></span>
+							<h3>Track</h3>
+							<p>
+								See how long you really spend on every site,
+								today and over weeks, months and years.
+							</p>
+						</article>
+						<article class="card pillar">
+							<span class="icon-tile tile-yellow"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-timer" /></svg
+							></span>
+							<h3>Limit</h3>
+							<p>
+								Give time-sinks a daily budget. You get a
+								heads-up before it runs out, then the site
+								closes until midnight.
+							</p>
+						</article>
+						<article class="card pillar">
+							<span class="icon-tile tile-red"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-ban" /></svg
+							></span>
+							<h3>Block</h3>
+							<p>
+								Shut out sites entirely, or any page whose
+								address contains a word you choose.
+							</p>
+						</article>
+					</div>
+				</div>
+			</section>
 
-          <!-- How it Works Section -->
-          <section id="how-it-works" class="how-it-works-section">
-            <h2 class="section-heading">How It Works</h2>
-            <div class="steps-container">
-              <div class="step-card">
-                <div class="step-number">1</div>
-                <h3 class="step-title">Install & Pin</h3>
-                <p class="step-desc">
-                  Add Time & Limit to your browser and pin it for quick access
-                  when you feel the urge to procrastinate.
-                </p>
-              </div>
-              <div class="step-connector"></div>
-              <div class="step-card">
-                <div class="step-number">2</div>
-                <h3 class="step-title">Set Your Rules</h3>
-                <p class="step-desc">
-                  Open the extension and add your top distractions to the Block
-                  List or set daily time budgets.
-                </p>
-              </div>
-              <div class="step-connector"></div>
-              <div class="step-card">
-                <div class="step-number">3</div>
-                <h3 class="step-title">Stay Focused</h3>
-                <p class="step-desc">
-                  Browse freely. Time & Limit automatically tracks your usage
-                  and blocks access when necessary.
-                </p>
-              </div>
-            </div>
-          </section>
+			<!-- Features -->
+			<section
+				class="section"
+				id="features"
+				aria-labelledby="features-title"
+			>
+				<div class="container">
+					<header class="section-head">
+						<p class="eyebrow">Features</p>
+						<h2 id="features-title">
+							Everything you need to browse on purpose
+						</h2>
+						<p class="section-lead">
+							Simple to start with, with deeper tools when you
+							want more control. Tracking, limits and blocking all
+							work offline and without an account.
+						</p>
+					</header>
 
-          <!-- FAQs Section -->
-          <section id="faqs" class="faq-section">
-            <h2 class="section-heading">Frequently Asked Questions</h2>
-            <div class="faq-accordion">
-              <div class="faq-item">
-                <button class="faq-question">
-                  Is Time & Limit perfectly free?
-                  <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                  <div class="faq-answer-inner">
-                    <p>
-                      Yes! Time & Limit is 100% free with no premium tiers,
-                      subscriptions, or hidden fees. Just install and start
-                      reclaiming your time.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="faq-item">
-                <button class="faq-question">
-                  Does it track my data or send it to a server?
-                  <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                  <div class="faq-answer-inner">
-                    <p>
-                      No. All data is stored locally on your device. We respect
-                      your privacy, and your browsing history never leaves your
-                      browser.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="faq-item">
-                <button class="faq-question">
-                  How does the daily time limit work?
-                  <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                  <div class="faq-answer-inner">
-                    <p>
-                      When you set a limit (e.g., 30 minutes on youtube.com),
-                      the extension counts active time spent on the site. If you
-                      exceed the budget, the site gets blocked until tomorrow.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="faq-item">
-                <button class="faq-question">
-                  Can I unblock a site if I really need it?
-                  <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                  <div class="faq-answer-inner">
-                    <p>
-                      Yes, you can easily remove a site from the Block List or
-                      adjust your limits from the extension popup at any time.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </main>
+					<div class="feature-grid">
+						<article class="card feature">
+							<span class="icon-tile tile-cyan"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-clock" /></svg
+							></span>
+							<h3>Accurate time tracking</h3>
+							<p>
+								Only the tab you're actually looking at is
+								counted. Step away from the keyboard and
+								tracking pauses, unless you're watching a video.
+							</p>
+						</article>
+						<article class="card feature">
+							<span class="icon-tile tile-yellow"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-timer" /></svg
+							></span>
+							<h3>Daily time limits</h3>
+							<p>
+								Set minutes per day for any site. A limit on
+								<code>reddit.com</code> also covers
+								<code>old.reddit.com</code>, so there's no
+								sneaking around it.
+							</p>
+						</article>
+						<article class="card feature">
+							<span class="icon-tile tile-red"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-ban" /></svg
+							></span>
+							<h3>Site &amp; keyword blocking</h3>
+							<p>
+								Block a whole domain, or type a word like
+								<code>casino</code> to block every page whose
+								address contains it.
+							</p>
+						</article>
+						<article class="card feature">
+							<span class="icon-tile tile-green"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-message" /></svg
+							></span>
+							<h3>Messages in your tone</h3>
+							<p>
+								The block page greets you with a kind, funny,
+								mean or angry message, whichever keeps you on
+								track best.
+							</p>
+						</article>
+						<article class="card feature">
+							<span class="icon-tile tile-purple"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-calendar" /></svg
+							></span>
+							<h3>Scheduled blocking</h3>
+							<p>
+								Block distractions automatically during set
+								hours on chosen days, such as weekdays 9 to 5,
+								or overnight from 22:00 to 07:00.
+							</p>
+						</article>
+						<article class="card feature">
+							<span class="icon-tile tile-cyan"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-lock" /></svg
+							></span>
+							<h3>Strict Mode</h3>
+							<p>
+								Adds friction when it matters: to remove a rule
+								you must type a sentence and wait 30 seconds,
+								which is usually long enough for the urge to
+								pass.
+							</p>
+						</article>
+						<article class="card feature">
+							<span class="icon-tile tile-yellow"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-chart" /></svg
+							></span>
+							<h3>Detailed insights</h3>
+							<p>
+								Weekly, monthly and yearly charts, a heatmap
+								calendar, categories, your busiest hours and how
+								you compare to last period.
+							</p>
+						</article>
+						<article class="card feature">
+							<span class="icon-tile tile-red"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-bell" /></svg
+							></span>
+							<h3>Warnings &amp; live badge</h3>
+							<p>
+								Notifications at 5 minutes and 1 minute left,
+								and a toolbar badge that counts down the time
+								remaining on the site you're on.
+							</p>
+						</article>
+						<article class="card feature">
+							<span class="icon-tile tile-green"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-download" /></svg
+							></span>
+							<h3>Your data, your way</h3>
+							<p>
+								Export your history as CSV, back up and restore
+								everything as a file, and optionally sync your
+								rules across your Chrome devices.
+							</p>
+						</article>
+					</div>
+				</div>
+			</section>
 
-      <footer>
-        <div class="footer-links">
-          <a href="privacy.html" class="nav-link">Privacy Policy</a>
-        </div>
-        <div class="footer-text">
-          Time is the only currency you can't save. Spend it wisely.
-        </div>
-        <div class="footer-credits">
-          &copy; 2026 Time & Limit. All rights reserved.<br />
-          Made by <span class="highlight">Eon</span>
-        </div>
-      </footer>
-    </div>
-    <script src="script.js"></script>
-  </body>
+			<!-- Tracking explained -->
+			<section
+				class="section section-alt"
+				id="tracking"
+				aria-labelledby="tracking-title"
+			>
+				<div class="container split">
+					<div class="split-copy">
+						<p class="eyebrow">How tracking works</p>
+						<h2 id="tracking-title">
+							Time that reflects real attention
+						</h2>
+						<p>
+							Many trackers count every second a tab is open. Time
+							&amp; Limit counts the time you actually spend,
+							using a few clear rules:
+						</p>
+						<ul class="rule-list">
+							<li>
+								<strong>The tab in front of you counts.</strong>
+								Switching tabs or apps moves the clock with you.
+							</li>
+							<li>
+								<strong>Away means away.</strong> After 2
+								minutes without keyboard or mouse input,
+								tracking pauses and those 2 idle minutes are
+								taken back off.
+							</li>
+							<li>
+								<strong>Watching still counts.</strong> A video
+								playing in the tab you're on keeps counting,
+								even with your hands off the keyboard.
+							</li>
+							<li>
+								<strong>Background audio is your call.</strong>
+								Music in a hidden tab only counts if you turn on
+								&ldquo;Track Background Audio&rdquo;.
+							</li>
+							<li>
+								<strong
+									>Locking your screen stops
+									everything.</strong
+								>
+								So does putting your computer to sleep.
+							</li>
+						</ul>
+					</div>
+
+					<div class="card scenario-card">
+						<h3>What gets counted?</h3>
+						<table class="scenario-table">
+							<caption class="visually-hidden">
+								Examples of what Time and Limit counts
+							</caption>
+							<thead>
+								<tr>
+									<th scope="col">Situation</th>
+									<th scope="col">Counted</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Reading a page in the active tab</td>
+									<td>
+										<span class="yes"
+											><svg
+												class="icon"
+												aria-hidden="true"
+											>
+												<use href="#i-check" /></svg
+											>Yes</span
+										>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Watching a video, hands off the keyboard
+									</td>
+									<td>
+										<span class="yes"
+											><svg
+												class="icon"
+												aria-hidden="true"
+											>
+												<use href="#i-check" /></svg
+											>Yes</span
+										>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Video on a second monitor while you work
+										elsewhere
+									</td>
+									<td>
+										<span class="yes"
+											><svg
+												class="icon"
+												aria-hidden="true"
+											>
+												<use href="#i-check" /></svg
+											>Yes</span
+										>
+									</td>
+								</tr>
+								<tr>
+									<td>Music playing in a hidden tab</td>
+									<td>
+										<span class="maybe"
+											>If you enable it</span
+										>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Tab left open while you're in another
+										app
+									</td>
+									<td>
+										<span class="no"
+											><svg
+												class="icon"
+												aria-hidden="true"
+											>
+												<use href="#i-x" /></svg
+											>No</span
+										>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Away from the computer, nothing playing
+									</td>
+									<td>
+										<span class="no"
+											><svg
+												class="icon"
+												aria-hidden="true"
+											>
+												<use href="#i-x" /></svg
+											>No</span
+										>
+									</td>
+								</tr>
+								<tr>
+									<td>Screen locked or computer asleep</td>
+									<td>
+										<span class="no"
+											><svg
+												class="icon"
+												aria-hidden="true"
+											>
+												<use href="#i-x" /></svg
+											>No</span
+										>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+
+			<!-- Limits & focus -->
+			<section class="section" aria-labelledby="limits-title">
+				<div class="container split split-reverse">
+					<div class="split-copy">
+						<p class="eyebrow">Limits &amp; schedules</p>
+						<h2 id="limits-title">
+							Boundaries that hold, without nagging
+						</h2>
+						<p>
+							Give a site 30 minutes a day and the toolbar badge
+							counts down as you use it. You'll get a notification
+							at 5 minutes and again at 1 minute left, and when
+							time is up the site is blocked until midnight. The
+							block happens the moment the limit runs out, not a
+							few seconds later.
+						</p>
+						<p>
+							Want guaranteed distraction-free hours? Set a
+							<strong>schedule</strong> and every limited site is
+							blocked automatically during the hours and days you
+							choose, such as weekdays 9 to 5.
+						</p>
+					</div>
+
+					<div class="stack-visual" aria-hidden="true">
+						<div class="card mock-notification">
+							<img src="logo.svg" alt="" width="36" height="36" />
+							<div>
+								<strong>5 minutes left</strong>
+								<span
+									>You're almost at your 30 minute daily limit
+									for youtube.com.</span
+								>
+							</div>
+						</div>
+						<div class="card mock-schedule">
+							<small>Scheduled blocking</small>
+							<div class="mock-times">
+								<span>09:00</span>to<span>17:00</span>
+							</div>
+							<div class="mock-days">
+								<span class="on">Mo</span
+								><span class="on">Tu</span
+								><span class="on">We</span
+								><span class="on">Th</span
+								><span class="on">Fr</span><span>Sa</span
+								><span>Su</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Insights -->
+			<section
+				class="section section-alt"
+				aria-labelledby="insights-title"
+			>
+				<div class="container split">
+					<div class="split-copy">
+						<p class="eyebrow">Insights</p>
+						<h2 id="insights-title">
+							Understand your habits, then change them
+						</h2>
+						<p>
+							The History page turns your browsing into clear,
+							honest charts:
+						</p>
+						<ul class="check-list">
+							<li>
+								<svg class="icon" aria-hidden="true">
+									<use href="#i-check" /></svg
+								>Weekly, monthly and yearly views with an
+								average line
+							</li>
+							<li>
+								<svg class="icon" aria-hidden="true">
+									<use href="#i-check" /></svg
+								>A heatmap calendar to spot heavy days at a
+								glance
+							</li>
+							<li>
+								<svg class="icon" aria-hidden="true">
+									<use href="#i-check" /></svg
+								>Comparison with the same point in the previous
+								period
+							</li>
+							<li>
+								<svg class="icon" aria-hidden="true">
+									<use href="#i-check" /></svg
+								>Time by category: social, video, news, shopping
+								and work
+							</li>
+							<li>
+								<svg class="icon" aria-hidden="true">
+									<use href="#i-check" /></svg
+								>Your busiest hours of the day
+							</li>
+							<li>
+								<svg class="icon" aria-hidden="true">
+									<use href="#i-check" /></svg
+								>One-click limit or block from your top sites
+							</li>
+						</ul>
+					</div>
+
+					<div class="card mock-chart" aria-hidden="true">
+						<div class="mock-chart-head">
+							<div class="mock-segment">
+								<span class="is-active">Weekly</span
+								><span>Monthly</span><span>Yearly</span>
+							</div>
+							<span class="mock-trend"
+								>&#9660; 18% vs last week</span
+							>
+						</div>
+						<div class="mock-bars">
+							<span style="--h: 45%"></span
+							><span style="--h: 70%"></span
+							><span style="--h: 55%"></span>
+							<span style="--h: 88%" class="is-selected"></span
+							><span style="--h: 40%"></span
+							><span style="--h: 25%"></span
+							><span style="--h: 30%"></span>
+							<i class="mock-avg"></i>
+						</div>
+						<div class="mock-days-axis">
+							<span>Mon</span><span>Tue</span><span>Wed</span
+							><span>Thu</span><span>Fri</span><span>Sat</span
+							><span>Sun</span>
+						</div>
+						<div class="mock-category">
+							<span style="--w: 38%" class="c-red"></span
+							><span style="--w: 26%" class="c-green"></span
+							><span style="--w: 18%" class="c-cyan"></span
+							><span style="--w: 18%" class="c-yellow"></span>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Block page -->
+			<section class="section" aria-labelledby="blockpage-title">
+				<div class="container split split-reverse">
+					<div class="split-copy">
+						<p class="eyebrow">The block page</p>
+						<h2 id="blockpage-title">
+							A wall that explains itself
+						</h2>
+						<p>
+							When a site is blocked you see why: a blocked site,
+							a blocked word, a used-up limit or your schedule.
+							You also see when it unblocks, with a live
+							countdown, and how long you've already spent there
+							today.
+						</p>
+						<p>
+							Pick the tone of the message that greets you:
+							<strong>kind</strong>, <strong>funny</strong>,
+							<strong>mean</strong> or <strong>angry</strong>.
+							When the block lifts, one click takes you back to
+							the page you were on.
+						</p>
+					</div>
+
+					<div class="card mock-block" aria-hidden="true">
+						<img src="logo.svg" alt="" width="56" height="56" />
+						<strong class="mock-block-title">Time's up</strong>
+						<span
+							>You've used your 30 minute daily limit on
+							<u>youtube.com</u>.</span
+						>
+						<div class="mock-block-info">
+							<div class="info-accent">
+								<small>Resets at midnight</small
+								><b>in 4h 12m</b>
+							</div>
+							<div>
+								<small>Today on this site</small><b>30m</b>
+							</div>
+						</div>
+						<em
+							>&ldquo;Small steps every day lead to big
+							results.&rdquo;</em
+						>
+					</div>
+				</div>
+			</section>
+
+			<!-- How it works -->
+			<section
+				class="section section-alt"
+				id="how-it-works"
+				aria-labelledby="steps-title"
+			>
+				<div class="container">
+					<header class="section-head">
+						<p class="eyebrow">Getting started</p>
+						<h2 id="steps-title">Up and running in three steps</h2>
+					</header>
+					<ol class="steps">
+						<li class="card step">
+							<span class="step-number">1</span>
+							<h3>Install &amp; pin</h3>
+							<p>
+								Add Time &amp; Limit to Chrome and pin it to
+								your toolbar so the countdown badge is always
+								visible.
+							</p>
+						</li>
+						<li class="card step">
+							<span class="step-number">2</span>
+							<h3>Browse as usual for a day</h3>
+							<p>
+								Let it learn where your time goes. Open the
+								popup any time to see today's total and top
+								sites.
+							</p>
+						</li>
+						<li class="card step">
+							<span class="step-number">3</span>
+							<h3>Set your rules</h3>
+							<p>
+								Add limits to your biggest time-sinks, block the
+								rest, and check your History page each week.
+							</p>
+						</li>
+					</ol>
+				</div>
+			</section>
+
+			<!-- Privacy -->
+			<section
+				class="section"
+				id="privacy"
+				aria-labelledby="privacy-title"
+			>
+				<div class="container split">
+					<div class="split-copy">
+						<p class="eyebrow">Privacy</p>
+						<h2 id="privacy-title">
+							Your browsing stays on your computer
+						</h2>
+						<p>
+							A tool that sees every site you visit should earn
+							your trust. Time &amp; Limit stores everything in
+							your browser's own storage. There are no servers, no
+							accounts, no analytics and no ads, and the
+							extension's pages make no requests to third parties:
+							even fonts and site icons are loaded locally.
+						</p>
+						<p>
+							Settings sync is optional and off by default. When
+							you turn it on, only your rules and preferences are
+							shared through Chrome Sync; your browsing history
+							never is. You can export or delete your data
+							whenever you like.
+						</p>
+						<a href="privacy.html" class="text-link">
+							Read the full privacy policy
+							<svg class="icon" aria-hidden="true">
+								<use href="#i-arrow" />
+							</svg>
+						</a>
+					</div>
+
+					<div class="card permissions-card">
+						<div class="permissions-head">
+							<span class="icon-tile tile-green"
+								><svg class="icon" aria-hidden="true">
+									<use href="#i-shield" /></svg
+							></span>
+							<div>
+								<h3>Why each permission is needed</h3>
+								<p>Six permissions, each with one job.</p>
+							</div>
+						</div>
+						<dl class="permissions">
+							<div>
+								<span class="perm-icon tile-cyan"
+									><svg class="icon" aria-hidden="true">
+										<use href="#i-window" /></svg
+								></span>
+								<dt>Tabs</dt>
+								<dd>
+									See which site you're on so it can count
+									time and block it when a rule applies.
+								</dd>
+							</div>
+							<div>
+								<span class="perm-icon tile-yellow"
+									><svg class="icon" aria-hidden="true">
+										<use href="#i-database" /></svg
+								></span>
+								<dt>Storage</dt>
+								<dd>
+									Save your rules and usage history on this
+									device.
+								</dd>
+							</div>
+							<div>
+								<span class="perm-icon tile-purple"
+									><svg class="icon" aria-hidden="true">
+										<use href="#i-coffee" /></svg
+								></span>
+								<dt>Idle</dt>
+								<dd>Pause tracking when you step away.</dd>
+							</div>
+							<div>
+								<span class="perm-icon tile-green"
+									><svg class="icon" aria-hidden="true">
+										<use href="#i-timer" /></svg
+								></span>
+								<dt>Alarms</dt>
+								<dd>
+									Check limits and schedules in the
+									background.
+								</dd>
+							</div>
+							<div>
+								<span class="perm-icon tile-red"
+									><svg class="icon" aria-hidden="true">
+										<use href="#i-bell" /></svg
+								></span>
+								<dt>Notifications</dt>
+								<dd>Warn you before a limit runs out.</dd>
+							</div>
+							<div>
+								<span class="perm-icon tile-cyan"
+									><svg class="icon" aria-hidden="true">
+										<use href="#i-image" /></svg
+								></span>
+								<dt>Favicon</dt>
+								<dd>
+									Show site icons from Chrome's local cache,
+									not the web.
+								</dd>
+							</div>
+						</dl>
+						<div class="permissions-never">
+							<p class="permissions-never-title">
+								Never requested
+							</p>
+							<ul>
+								<li>
+									<svg class="icon" aria-hidden="true">
+										<use href="#i-x" /></svg
+									>Reading page content
+								</li>
+								<li>
+									<svg class="icon" aria-hidden="true">
+										<use href="#i-x" /></svg
+									>Access to all websites
+								</li>
+								<li>
+									<svg class="icon" aria-hidden="true">
+										<use href="#i-x" /></svg
+									>Your Chrome history
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- FAQ -->
+			<section
+				class="section section-alt"
+				id="faq"
+				aria-labelledby="faq-title"
+			>
+				<div class="container container-narrow">
+					<header class="section-head">
+						<p class="eyebrow">FAQ</p>
+						<h2 id="faq-title">Frequently asked questions</h2>
+					</header>
+
+					<div class="faq">
+						<details class="card faq-item">
+							<summary>
+								Is Time &amp; Limit really free?<svg
+									class="icon"
+									aria-hidden="true"
+								>
+									<use href="#i-chevron" />
+								</svg>
+							</summary>
+							<p>
+								Yes. There are no premium tiers, subscriptions,
+								ads or hidden fees.
+							</p>
+						</details>
+						<details class="card faq-item">
+							<summary>
+								Does it send my browsing data anywhere?<svg
+									class="icon"
+									aria-hidden="true"
+								>
+									<use href="#i-chevron" />
+								</svg>
+							</summary>
+							<p>
+								No. All tracking happens and is stored inside
+								your browser. The only optional exception is
+								settings sync, which shares your rules (never
+								your history) through your own Chrome account.
+							</p>
+						</details>
+						<details class="card faq-item">
+							<summary>
+								How does a daily limit work?<svg
+									class="icon"
+									aria-hidden="true"
+								>
+									<use href="#i-chevron" />
+								</svg>
+							</summary>
+							<p>
+								Set minutes per day for a site, such as 30
+								minutes for youtube.com. Time on the site and
+								its subdomains adds up towards it. You're warned
+								at 5 minutes and 1 minute left, and when the
+								time is used up the site is blocked until
+								midnight, when every limit resets.
+							</p>
+						</details>
+						<details class="card faq-item">
+							<summary>
+								What counts as time, and what doesn't?<svg
+									class="icon"
+									aria-hidden="true"
+								>
+									<use href="#i-chevron" />
+								</svg>
+							</summary>
+							<p>
+								The tab you're looking at counts. If you're away
+								for more than 2 minutes, tracking pauses and the
+								idle minutes are removed, unless a video or
+								audio is playing in that tab. Music in hidden
+								tabs counts only if you turn on &ldquo;Track
+								Background Audio&rdquo;. A locked screen or
+								sleeping computer never counts.
+							</p>
+						</details>
+						<details class="card faq-item">
+							<summary>
+								What's the difference between blocking and
+								limiting?<svg class="icon" aria-hidden="true">
+									<use href="#i-chevron" />
+								</svg>
+							</summary>
+							<p>
+								A blocked site is always closed. A limited site
+								is open until you've used its daily budget.
+								Limited sites are also the ones your schedule
+								blocks, so your limits list doubles as your list
+								of distractions.
+							</p>
+						</details>
+						<details class="card faq-item">
+							<summary>
+								Can I unblock a site if I really need it?<svg
+									class="icon"
+									aria-hidden="true"
+								>
+									<use href="#i-chevron" />
+								</svg>
+							</summary>
+							<p>
+								Yes, from the extension popup at any time. If
+								you've turned on Strict Mode you'll first need
+								to type a short sentence and wait 30 seconds.
+								That delay is deliberate.
+							</p>
+						</details>
+						<details class="card faq-item">
+							<summary>
+								Can Strict Mode be bypassed?<svg
+									class="icon"
+									aria-hidden="true"
+								>
+									<use href="#i-chevron" />
+								</svg>
+							</summary>
+							<p>
+								Honestly, yes: no extension can stop you from
+								turning it off in Chrome's settings. Strict Mode
+								is designed to add enough friction to stop
+								impulsive decisions, not to lock you out of your
+								own browser.
+							</p>
+						</details>
+						<details class="card faq-item">
+							<summary>
+								Does it work in Incognito windows?<svg
+									class="icon"
+									aria-hidden="true"
+								>
+									<use href="#i-chevron" />
+								</svg>
+							</summary>
+							<p>
+								Only if you allow it. Chrome keeps extensions
+								out of Incognito by default; you can enable it
+								under Manage extension &rarr; Allow in
+								Incognito. Once allowed, your blocks, limits and
+								schedule apply there too, and Incognito time
+								counts toward the same daily limits. Keep in
+								mind that sites visited in Incognito are then
+								saved in your stats and history like any others.
+							</p>
+						</details>
+						<details class="card faq-item">
+							<summary>
+								Will it slow down my browser?<svg
+									class="icon"
+									aria-hidden="true"
+								>
+									<use href="#i-chevron" />
+								</svg>
+							</summary>
+							<p>
+								No. It checks in every 30 seconds and saves in
+								small batches. It doesn't add any scripts to the
+								pages you visit and never reads what's on them.
+							</p>
+						</details>
+						<details class="card faq-item">
+							<summary>
+								Which browsers are supported?<svg
+									class="icon"
+									aria-hidden="true"
+								>
+									<use href="#i-chevron" />
+								</svg>
+							</summary>
+							<p>
+								Time &amp; Limit is built for Google Chrome.
+								Other Chromium-based browsers may work, but they
+								aren't officially tested.
+							</p>
+						</details>
+					</div>
+				</div>
+			</section>
+
+			<!-- Final call to action -->
+			<section
+				class="section"
+				id="install"
+				aria-labelledby="install-title"
+			>
+				<div class="container">
+					<div class="card cta">
+						<div>
+							<h2 id="install-title">
+								Ready to spend your time on purpose?
+							</h2>
+							<p>Free, private and ready in under a minute.</p>
+						</div>
+						<a
+							href="#install"
+							class="btn btn-primary"
+							data-store-link
+						>
+							Add to Chrome &mdash; it's free
+							<svg class="icon" aria-hidden="true">
+								<use href="#i-arrow" />
+							</svg>
+						</a>
+						<!-- Shown until the Chrome Web Store link is set in script.js -->
+						<div class="manual-install" id="manual-install">
+							<h3>Install manually</h3>
+							<ol>
+								<li>
+									Download or clone the extension's source
+									code.
+								</li>
+								<li>
+									Open <code>chrome://extensions</code> and
+									turn on <strong>Developer mode</strong> (top
+									right).
+								</li>
+								<li>
+									Click <strong>Load unpacked</strong> and
+									select the extension folder.
+								</li>
+								<li>
+									Pin Time &amp; Limit from the puzzle-piece
+									menu in the toolbar.
+								</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<footer class="site-footer">
+			<div class="container footer-grid">
+				<div class="footer-brand">
+					<a href="index.html" class="brand">
+						<img
+							src="logo.svg"
+							alt=""
+							class="brand-logo"
+							width="28"
+							height="28"
+						/>
+						<span>Time &amp; Limit</span>
+					</a>
+					<p>
+						Time is the only currency you can't save. Spend it
+						wisely.
+					</p>
+				</div>
+				<nav class="footer-nav" aria-label="Footer">
+					<a href="#features">Features</a>
+					<a href="#faq">FAQ</a>
+					<a href="privacy.html">Privacy policy</a>
+					<a href="https://eony.dev" target="_blank" rel="noopener"
+						>Contact</a
+					>
+				</nav>
+			</div>
+			<div class="container footer-bottom">
+				<p>
+					&copy; <span id="year">2026</span> Time &amp; Limit. Made by
+					<a href="https://eony.dev" target="_blank" rel="noopener"
+						>Eon</a
+					>.
+				</p>
+			</div>
+		</footer>
+	</body>
 </html>
